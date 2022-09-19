@@ -127,7 +127,7 @@ spec:
               subPath: r10k_code_cronjob.sh
             - name: r10k-code-volume
               mountPath: /etc/puppetlabs/puppet/configmap/r10k_code.yaml
-              subPath: r10k_code.yaml
+              subPath: r10k_code.yaml            
             {{- end }}
             {{- if (include "hiera.enable" .) }}
             - name: r10k-hiera-volume
