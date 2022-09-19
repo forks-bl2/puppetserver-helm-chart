@@ -77,6 +77,9 @@ spec:
               {{- if .Values.puppetserver.puppeturl }}
               cp /etc/puppetlabs/puppet/configmap/r10k_code_entrypoint.sh /etc/puppetlabs/puppet/r10k_code_entrypoint.sh;
               cp /etc/puppetlabs/puppet/configmap/r10k_code_cronjob.sh /etc/puppetlabs/puppet/r10k_code_cronjob.sh;
+              {{- if .Values.r10k.code.cronJob.additionalScript }}
+                cp /etc/puppetlabs/puppet/configmap/additional-cronjob-script.sh /etc/puppetlabs/puppet/additional-cronjob-script.sh;
+              {{- end }}
               cp /etc/puppetlabs/puppet/configmap/r10k_code.yaml /etc/puppetlabs/puppet/r10k_code.yaml;
               chown puppet:puppet /etc/puppetlabs/puppet/r10k_code_entrypoint.sh /etc/puppetlabs/puppet/r10k_code_cronjob.sh /etc/puppetlabs/puppet/r10k_code.yaml;
               chmod +x /etc/puppetlabs/puppet/r10k_code_entrypoint.sh /etc/puppetlabs/puppet/r10k_code_cronjob.sh;
