@@ -393,6 +393,8 @@ r10k:
       splayLimit: 60
       # timeout: 60
       successFile: ~/.r10k_code_cronjob.success
+      additionalScript: # |
+        # script content
     ## Additional r10k code container arguments
     extraArgs: []
     #   - --verbose=debug2   # error, warn, notice, info, debug, debug1, debug2
