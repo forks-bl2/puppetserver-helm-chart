@@ -91,7 +91,7 @@ puppetserver:
     ingress:
       ## If true, Puppet Server Masters Ingress will be created
       ##
-      enabled: false
+      enabled: true
       ## Puppet Server Masters Ingress annotations
       ##
       annotations: {}

@@ -5,7 +5,7 @@ entries:
       category: Database
     apiVersion: v2
     appVersion: 11.14.0
-    created: "2022-09-19T16:10:34.705234221-03:00"
+    created: "2022-10-10T19:01:28.094907229-03:00"
     dependencies:
     - name: common
       repository: https://charts.bitnami.com/bitnami
@@ -37,14 +37,104 @@ entries:
   puppetserver:
   - apiVersion: v2
     appVersion: 7.4.2
-    created: "2022-09-19T16:10:34.701547507-03:00"
+    created: "2022-10-10T19:01:28.089489903-03:00"
     dependencies:
     - condition: postgresql.enabled
       name: postgresql
       repository: https://charts.bitnami.com/bitnami
       version: 10.16.*
     description: Puppet automates the delivery and operation of software.
-    digest: 6db5f62e098875b6c5cfb2c6caa124c8fc78ec66f0393089200aa687e78e8667
+    digest: 0eae19495c1d63cbb19263688e3bd4efb42ca8d1c4836663ce8419e004bde05d
+    home: https://puppet.com/
+    icon: https://secure.gravatar.com/avatar/fdd009b7c1ec96e088b389f773e87aec.jpg?s=80&r=g&d=mm
+    keywords:
+    - puppet
+    - puppetserver
+    - automation
+    - iac
+    - infrastructure
+    - cm
+    - ci
+    - cd
+    kubeVersion: '>=1.10.0-0'
+    maintainers:
+    - email: miroslav.hadzhiev@gmail.com
+      name: Xtigyro
+    - email: morgan@puppet.com
+      name: underscorgan
+    - email: slconley@gmail.com
+      name: slconley
+    - email: raphael.pinson@camptocamp.com
+      name: raphink
+    - email: david.phayanouvong@gmail.com
+      name: davidphay
+    - email: reinier@skoef.nl
+      name: skoef
+    - email: pupperware@puppet.com
+      name: Pupperware Team
+    name: puppetserver
+    sources:
+    - https://github.com/puppetlabs/pupperware/
+    - https://github.com/postgres/postgres
+    - https://github.com/bitnami/charts/tree/master/bitnami/postgresql
+    urls:
+    - https://forks-bl2.github.io/puppetserver-helm-chart/puppetserver-6.6.0.tgz
+    version: 6.6.0
+  - apiVersion: v2
+    appVersion: 7.4.2
+    created: "2022-10-10T19:01:28.07793637-03:00"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.16.*
+    description: Puppet automates the delivery and operation of software.
+    digest: a250c925f568e58b820f960c9ef59c85e17e63f3750d20987889866fd173a77c
+    home: https://puppet.com/
+    icon: https://secure.gravatar.com/avatar/fdd009b7c1ec96e088b389f773e87aec.jpg?s=80&r=g&d=mm
+    keywords:
+    - puppet
+    - puppetserver
+    - automation
+    - iac
+    - infrastructure
+    - cm
+    - ci
+    - cd
+    kubeVersion: '>=1.10.0-0'
+    maintainers:
+    - email: miroslav.hadzhiev@gmail.com
+      name: Xtigyro
+    - email: morgan@puppet.com
+      name: underscorgan
+    - email: slconley@gmail.com
+      name: slconley
+    - email: raphael.pinson@camptocamp.com
+      name: raphink
+    - email: david.phayanouvong@gmail.com
+      name: davidphay
+    - email: reinier@skoef.nl
+      name: skoef
+    - email: pupperware@puppet.com
+      name: Pupperware Team
+    name: puppetserver
+    sources:
+    - https://github.com/puppetlabs/pupperware/
+    - https://github.com/postgres/postgres
+    - https://github.com/bitnami/charts/tree/master/bitnami/postgresql
+    urls:
+    - https://forks-bl2.github.io/puppetserver-helm-chart/puppetserver-6.5.4.tgz
+    version: 6.5.4
+  - apiVersion: v2
+    appVersion: 7.4.2
+    created: "2022-10-10T19:01:28.057807878-03:00"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.16.*
+    description: Puppet automates the delivery and operation of software.
+    digest: f67b7ff643dbe0ea0055ffde9d775df9e288d88e5565ee4bd9b74306c9b82b69
     home: https://puppet.com/
     icon: https://secure.gravatar.com/avatar/fdd009b7c1ec96e088b389f773e87aec.jpg?s=80&r=g&d=mm
     keywords:
@@ -80,4 +170,4 @@ entries:
     urls:
     - https://forks-bl2.github.io/puppetserver-helm-chart/puppetserver-6.5.3.tgz
     version: 6.5.3
-generated: "2022-09-19T16:10:34.692455302-03:00"
+generated: "2022-10-10T19:01:28.037247429-03:00"
