@@ -5,7 +5,7 @@ entries:
       category: Database
     apiVersion: v2
     appVersion: 11.14.0
-    created: "2022-10-10T19:01:28.094907229-03:00"
+    created: "2022-10-10T19:11:38.001984227-03:00"
     dependencies:
     - name: common
       repository: https://charts.bitnami.com/bitnami
@@ -37,14 +37,14 @@ entries:
   puppetserver:
   - apiVersion: v2
     appVersion: 7.4.2
-    created: "2022-10-10T19:01:28.089489903-03:00"
+    created: "2022-10-10T19:11:37.998073853-03:00"
     dependencies:
     - condition: postgresql.enabled
       name: postgresql
       repository: https://charts.bitnami.com/bitnami
       version: 10.16.*
     description: Puppet automates the delivery and operation of software.
-    digest: 0eae19495c1d63cbb19263688e3bd4efb42ca8d1c4836663ce8419e004bde05d
+    digest: 59b9d917c579617a2e38681521c9ff640cab5f0c2a9c666d35480090aa7c6c81
     home: https://puppet.com/
     icon: https://secure.gravatar.com/avatar/fdd009b7c1ec96e088b389f773e87aec.jpg?s=80&r=g&d=mm
     keywords:
@@ -82,7 +82,7 @@ entries:
     version: 6.6.0
   - apiVersion: v2
     appVersion: 7.4.2
-    created: "2022-10-10T19:01:28.07793637-03:00"
+    created: "2022-10-10T19:11:37.987627813-03:00"
     dependencies:
     - condition: postgresql.enabled
       name: postgresql
@@ -127,7 +127,7 @@ entries:
     version: 6.5.4
   - apiVersion: v2
     appVersion: 7.4.2
-    created: "2022-10-10T19:01:28.057807878-03:00"
+    created: "2022-10-10T19:11:37.976438189-03:00"
     dependencies:
     - condition: postgresql.enabled
       name: postgresql
@@ -170,4 +170,4 @@ entries:
     urls:
     - https://forks-bl2.github.io/puppetserver-helm-chart/puppetserver-6.5.3.tgz
     version: 6.5.3
-generated: "2022-10-10T19:01:28.037247429-03:00"
+generated: "2022-10-10T19:11:37.966867097-03:00"
