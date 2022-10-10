@@ -36,6 +36,10 @@ data:
     else
       rm {{ .Values.r10k.code.cronJob.successFile }} > /dev/null 2>&1
     fi
+    {{- if .Values.r10k.code.cronJob.additionalScript }}
+      sh /etc/puppetlabs/puppet/additional-cronjob-script.sh
+    {{- end}}
+    
     exit $retVal
 
   r10k_code_entrypoint.sh: |
@@ -53,4 +57,9 @@ data:
     {{- else}}
     tail -f /dev/null
     {{- end }}
+
+  {{- if .Values.r10k.code.cronJob.additionalScript }}
+  additional-cronjob-script.sh:
+    {{ .Values.r10k.code.cronJob.additionalScript | nindent 4}}
+  {{- end }}
 {{- end }}

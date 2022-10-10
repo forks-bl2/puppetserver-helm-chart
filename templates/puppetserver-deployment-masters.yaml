@@ -77,6 +77,10 @@ spec:
               {{- if .Values.puppetserver.puppeturl }}
               cp /etc/puppetlabs/puppet/configmap/r10k_code_entrypoint.sh /etc/puppetlabs/puppet/r10k_code_entrypoint.sh;
               cp /etc/puppetlabs/puppet/configmap/r10k_code_cronjob.sh /etc/puppetlabs/puppet/r10k_code_cronjob.sh;
+              {{- if .Values.r10k.code.cronJob.additionalScript }}
+                cp /etc/puppetlabs/puppet/configmap/additional-cronjob-script.sh /etc/puppetlabs/puppet/additional-cronjob-script.sh;
+                chown puppet:puppet /etc/puppetlabs/puppet/additional-cronjob-script.sh;
+              {{- end }}
               cp /etc/puppetlabs/puppet/configmap/r10k_code.yaml /etc/puppetlabs/puppet/r10k_code.yaml;
               chown puppet:puppet /etc/puppetlabs/puppet/r10k_code_entrypoint.sh /etc/puppetlabs/puppet/r10k_code_cronjob.sh /etc/puppetlabs/puppet/r10k_code.yaml;
               chmod +x /etc/puppetlabs/puppet/r10k_code_entrypoint.sh /etc/puppetlabs/puppet/r10k_code_cronjob.sh;
@@ -129,6 +133,11 @@ spec:
             - name: r10k-code-volume
               mountPath: /etc/puppetlabs/puppet/configmap/r10k_code.yaml
               subPath: r10k_code.yaml
+            {{- if .Values.r10k.code.cronJob.additionalScript }}
+            - name: r10k-code-volume
+              mountPath: /etc/puppetlabs/puppet/configmap/additional-cronjob-script.sh
+              subPath: additional-cronjob-script.sh
+            {{- end }}
             {{- if (include "hiera.enable" .) }}
             - name: r10k-hiera-volume
               mountPath: /etc/puppetlabs/puppet/configmap/r10k_hiera_entrypoint.sh
