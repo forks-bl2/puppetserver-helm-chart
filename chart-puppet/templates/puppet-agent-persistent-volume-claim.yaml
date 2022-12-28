@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: puppet-agent-persistent-volume-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: {{ .Values.puppetAgent.storage.size }} 
+  storageClassName: {{ .Values.puppetAgent.storage.storageClass }}
+  
+  # volumeName: puppet-agent-volume

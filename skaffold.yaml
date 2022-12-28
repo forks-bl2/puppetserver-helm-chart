@@ -1,0 +1,72 @@
+apiVersion: skaffold/v2beta26
+kind: Config
+metadata:
+  name: coldchain
+build:
+  tagPolicy:
+    gitCommit: {}
+  local:
+    #permitir build concorrente das imagens
+    concurrency: 4
+    tryImportMissing: false
+    push: true
+    useBuildkit: true
+  artifacts:
+    - image: puppet-agent
+      context: puppet/docker
+      docker:
+        dockerfile: DockerfilePuppetAgent
+        # dockerfile: DockerfilePuppetAgent5
+deploy:
+  statusCheckDeadlineSeconds: 1200
+  helm:
+    releases:
+      - name: puppet-server
+        recreatePods: false
+        skipBuildDependencies: false
+        useHelmSecrets: false
+        wait: false
+        namespace: puppet-server-dev
+        createNamespace: true
+        valuesFiles: ["chart-puppet/values.yaml"]
+        # repo: https://puppetlabs.github.io/puppetserver-helm-chart
+        # repo: https://forks-bl2.github.io/puppetserver-helm-chart
+        # remoteChart: puppetserver
+        chartPath: .
+        upgradeOnChange: true
+
+      - name: puppet-agent
+        chartPath: chart-puppet
+        artifactOverrides:
+          puppetAgent.image: puppet-agent
+        namespace: puppet-agent-dev
+        valuesFiles: ["chart-puppet/values.yaml"]
+        createNamespace: true
+
+profiles:
+  - name: "staging"
+    activation:
+      - command: "run"
+      - command: "deploy"
+    deploy:
+      kubeContext: arn:aws:eks:us-east-1:610912362222:cluster/aws-von-braun-prd
+    patches:
+      - op: replace
+        path: /deploy/helm/releases/0/namespace
+        value: puppet-server-stag
+      - op: replace
+        path: /deploy/helm/releases/0/valuesFiles
+        value: ["chart-puppet/values.yaml", "chart-puppet/stag-values.yaml"]
+      - op: replace
+        path: /deploy/helm/releases/1/namespace
+        value: puppet-agent-stag
+      - op: replace
+        path: /deploy/helm/releases/1/valuesFiles
+        value: ["chart-puppet/values.yaml", "chart-puppet/stag-values.yaml"]
+
+portForward:
+  - resourceType: service
+    resourceName: puppetdb
+    namespace: puppet-server-dev
+    port: 9090
+    localPort: 9928

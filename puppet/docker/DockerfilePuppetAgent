@@ -1,0 +1,18 @@
+FROM ubuntu:22.04
+
+# Variáveis de Ambiente
+
+ENV PUPPET_VERSION=7
+ENV PUPPET_RELEASE=jammy
+ENV PUPPET_DEB_FILE=puppet${PUPPET_VERSION}-release-${PUPPET_RELEASE}.deb
+ENV PATH=/opt/puppetlabs/bin:$PATH
+
+RUN apt update && \
+    apt install -y wget dnsutils
+RUN wget https://apt.puppet.com/${PUPPET_DEB_FILE}
+RUN dpkg -i ${PUPPET_DEB_FILE}
+RUN apt update && \
+    apt install puppet-agent -y
+
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+ENTRYPOINT [ "sh", "/docker-entrypoint.sh" ]

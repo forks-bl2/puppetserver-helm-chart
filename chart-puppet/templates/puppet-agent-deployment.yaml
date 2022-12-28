@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: puppet-agent
+  labels:
+    app: puppet-agent
+  
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: puppet-agent
+  progressDeadlineSeconds: 1200
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: puppet-agent
+    spec:
+      containers:
+        # - name: change-permissions
+        #   image: alpine
+        #   command: 
+        #     - chown 
+        #     - '101:101'
+        #     - /var/lib/puppet/ssl
+        #   volumeMounts:
+        #     - name: ssl
+        #       mountPath: /var/lib/puppet/ssl
+        - name: puppet-agent
+          image: "{{ .Values.puppetAgent.image }}"
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: PUPPET_AGENT_ENVIRONMENT
+              value: {{.Values.puppetAgent.environment}}
+            - name: ENVIRONMENT
+              value: {{ .Values.environment }}
+          volumeMounts:
+            - name: ssl
+              # mountPath: /var/lib/puppet/ssl
+              mountPath: /etc/puppetlabs/puppet/ssl
+          #     mountPath: /home/puppet/.puppetlabs/etc/puppet/ssl
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      # securityContext:
+      #   runAsUser: 1000
+      #   runAsGroup: 0
+      #   fsGroup: 1000
+      #   fsGroupChangePolicy: "OnRootMismatch"
+      schedulerName: default-scheduler
+      volumes:
+        - name: ssl
+          persistentVolumeClaim:
+            claimName: puppet-agent-persistent-volume-claim
+  strategy:
+    type: Recreate
+    # rollingUpdate:
+    #   maxUnavailable: 25%
+    #   maxSurge: 25%
+  revisionHistoryLimit: 10
+  
+  
+
