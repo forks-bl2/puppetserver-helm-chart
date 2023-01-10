@@ -329,10 +329,274 @@ puppetserver:
   ## Custom puppetserver conf.d configs
   ##
   customconfigs:
-    enabled: false
-    configmaps: {}
-    #  auth.conf: |-
-    #    {}
+    enabled: true
+    configmaps:
+      auth.conf: |-
+        authorization: {
+          version: 1
+          rules: [
+              {
+                  # Allow nodes to retrieve their own catalog
+                  match-request: {
+                      path: "^/puppet/v3/catalog/([^/]+)$"
+                      type: regex
+                      method: [get, post]
+                  }
+                  allow: "$1"
+                  sort-order: 500
+                  name: "puppetlabs v3 catalog from agents"
+              },
+              {
+                  # Allow services to retrieve catalogs on behalf of others
+                  match-request: {
+                      path: "^/puppet/v4/catalog/?$"
+                      type: regex
+                      method: post
+                  }
+                  deny: "*"
+                  sort-order: 500
+                  name: "puppetlabs v4 catalog for services"
+              },
+              {
+                  # Allow nodes to retrieve the certificate they requested earlier
+                  match-request: {
+                      path: "/puppet-ca/v1/certificate/"
+                      type: path
+                      method: get
+                  }
+                  allow-unauthenticated: true
+                  sort-order: 500
+                  name: "puppetlabs certificate"
+              },
+              {
+                  # Allow all nodes to access the certificate revocation list
+                  match-request: {
+                      path: "/puppet-ca/v1/certificate_revocation_list/ca"
+                      type: path
+                      method: get
+                  }
+                  allow-unauthenticated: true
+                  sort-order: 500
+                  name: "puppetlabs crl"
+              },
+              {
+                  # Allow nodes to request a new certificate
+                  match-request: {
+                      path: "/puppet-ca/v1/certificate_request"
+                      type: path
+                      method: [get, put]
+                  }
+                  allow-unauthenticated: true
+                  sort-order: 500
+                  name: "puppetlabs csr"
+              },
+              {
+                  # Allow the CA CLI to access the certificate_status endpoint
+                  match-request: {
+                      path: "/puppet-ca/v1/certificate_status"
+                      type: path
+                      method: [get, put, delete]
+                  }
+                  allow: {
+                    extensions: {
+                        pp_cli_auth: "true"
+                    }
+                  }
+                  allow: coldchain-vpn-server.sa-east-1.compute.internal
+                  sort-order: 500
+                  name: "puppetlabs cert status"
+              },
+              {
+                  match-request: {
+                      path: "^/puppet-ca/v1/certificate_revocation_list$"
+                      type: regex
+                      method: put
+                  }
+                  allow: {
+                    extensions: {
+                        pp_cli_auth: "true"
+                    }
+                  }
+                  sort-order: 500
+                  name: "puppetlabs CRL update"
+              },
+              {
+                  # Allow the CA CLI to access the certificate_statuses endpoint
+                  match-request: {
+                      path: "/puppet-ca/v1/certificate_statuses"
+                      type: path
+                      method: get
+                  }
+                  allow: {
+                    extensions: {
+                        pp_cli_auth: "true"
+                    }
+                  }
+                  allow: coldchain-vpn-server.sa-east-1.compute.internal
+                  sort-order: 500
+                  name: "puppetlabs cert statuses"
+              },
+              {
+                  # Allow authenticated access to the CA expirations endpoint
+                  match-request: {
+                      path: "/puppet-ca/v1/expirations"
+                      type: path
+                      method: get
+                  }
+                  allow: "*"
+                  sort-order: 500
+                  name: "puppetlabs CA cert and CRL expirations"
+              },
+              {
+                  # Allow the CA CLI to access the certificate clean endpoint
+                  match-request: {
+                      path: "/puppet-ca/v1/clean"
+                      type: path
+                      method: put
+                  }
+                  allow: {
+                    extensions: {
+                        pp_cli_auth: "true"
+                    }
+                  }
+                  sort-order: 500
+                  name: "puppetlabs cert clean"
+              },
+              {
+                  # Allow unauthenticated access to the status service endpoint
+                  match-request: {
+                      path: "/status/v1/services"
+                      type: path
+                      method: get
+                  }
+                  allow-unauthenticated: true
+                  sort-order: 500
+                  name: "puppetlabs status service - full"
+              },
+              {
+                  match-request: {
+                      path: "/status/v1/simple"
+                      type: path
+                      method: get
+                  }
+                  allow-unauthenticated: true
+                  sort-order: 500
+                  name: "puppetlabs status service - simple"
+              },
+              {
+                  match-request: {
+                      path: "/puppet/v3/environments"
+                      type: path
+                      method: get
+                  }
+                  allow: "*"
+                  sort-order: 500
+                  name: "puppetlabs environments"
+              },
+              {
+                  # Allow nodes to access all file_bucket_files.  Note that access for
+                  # the 'delete' method is forbidden by Puppet regardless of the
+                  # configuration of this rule.
+                  match-request: {
+                      path: "/puppet/v3/file_bucket_file"
+                      type: path
+                      method: [get, head, post, put]
+                  }
+                  allow: "*"
+                  sort-order: 500
+                  name: "puppetlabs file bucket file"
+              },
+              {
+                  # Allow nodes to access all file_content.  Note that access for the
+                  # 'delete' method is forbidden by Puppet regardless of the
+                  # configuration of this rule.
+                  match-request: {
+                      path: "/puppet/v3/file_content"
+                      type: path
+                      method: [get, post]
+                  }
+                  allow: "*"
+                  sort-order: 500
+                  name: "puppetlabs file content"
+              },
+              {
+                  # Allow nodes to access all file_metadata.  Note that access for the
+                  # 'delete' method is forbidden by Puppet regardless of the
+                  # configuration of this rule.
+                  match-request: {
+                      path: "/puppet/v3/file_metadata"
+                      type: path
+                      method: [get, post]
+                  }
+                  allow: "*"
+                  sort-order: 500
+                  name: "puppetlabs file metadata"
+              },
+              {
+                  # Allow nodes to retrieve only their own node definition
+                  match-request: {
+                      path: "^/puppet/v3/node/([^/]+)$"
+                      type: regex
+                      method: get
+                  }
+                  allow: "$1"
+                  sort-order: 500
+                  name: "puppetlabs node"
+              },
+              {
+                  # Allow nodes to store only their own reports
+                  match-request: {
+                      path: "^/puppet/v3/report/([^/]+)$"
+                      type: regex
+                      method: put
+                  }
+                  allow: "$1"
+                  sort-order: 500
+                  name: "puppetlabs report"
+              },
+              {
+                  # Allow nodes to update their own facts
+                  match-request: {
+                      path: "^/puppet/v3/facts/([^/]+)$"
+                      type: regex
+                      method: put
+                  }
+                  allow: "$1"
+                  sort-order: 500
+                  name: "puppetlabs facts"
+              },
+              {
+                  match-request: {
+                      path: "/puppet/v3/static_file_content"
+                      type: path
+                      method: get
+                  }
+                  allow: "*"
+                  sort-order: 500
+                  name: "puppetlabs static file content"
+              },
+              {
+                  match-request: {
+                      path: "/puppet/v3/tasks"
+                      type: path
+                  }
+                  allow: "*"
+                  sort-order: 500
+                  name: "puppet tasks information"
+              },
+              {
+                  # Deny everything else. This ACL is not strictly
+                  # necessary, but illustrates the default policy
+                  match-request: {
+                      path: "/"
+                      type: path
+                  }
+                  deny: "*"
+                  sort-order: 999
+                  name: "puppetlabs deny all"
+              }
+          ]
+        }
 
   ## Custom puppetserver entrypoints
   ##
@@ -395,8 +659,8 @@ r10k:
       # timeout: 60
       successFile: ~/.r10k_code_cronjob.success
       additionalScript: |
-        ln -s /etc/puppetlabs/code/environments/develop /etc/puppetlabs/code/environments/verification &&
-        ln -s /etc/puppetlabs/code/environments/production /etc/puppetlabs/code/environments/homologation
+        ln -s /etc/puppetlabs/code/environments/develop /etc/puppetlabs/code/environments/verification || true &&
+        ln -s /etc/puppetlabs/code/environments/production /etc/puppetlabs/code/environments/homologation || true
     ## Additional r10k code container arguments
     extraArgs: []
     #   - --verbose=debug2   # error, warn, notice, info, debug, debug1, debug2
@@ -554,6 +818,8 @@ puppetdb:
 postgresql:
   enabled: true
   name: postgresql
+  image:
+    tag: 10.23.0-debian-11-r3
   ## Configure resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -567,6 +833,8 @@ postgresql:
   ## Create a database
   ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-on-first-run
   ##
+  auth:
+    database: puppetdb
   postgresqlDatabase: puppetdb
   ## Specify the PostgreSQL username and password to execute the initdb scripts
   ##
